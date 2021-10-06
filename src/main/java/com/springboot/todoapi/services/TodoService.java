@@ -1,6 +1,8 @@
 package com.springboot.todoapi.services;
 
 import com.springboot.todoapi.models.Todo;
+import com.springboot.todoapi.repository.TodoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,48 +10,38 @@ import java.util.Arrays;
 import java.util.List;
 @Service
 public class TodoService {
-    private List<Todo> data = new ArrayList<>(Arrays.asList(
-                new Todo("1", "firstTodo", "this is my first task"),
-                new Todo("2", "SecondTodo", "this is my second task"),
-                new Todo("3", "thirdTodo", "this is my third task")
-            )
-    );
 
+    @Autowired
+    private TodoRepository todoRepository;
+
+    /**
+     * Get all todos
+     * @return List of todos
+     */
     public List<Todo> getAllTodos() {
-        return data;
+        return todoRepository.findAll();
     }
 
     public Todo getById(String id) {
-        for (Todo todo : data) {
-            if (todo.getId().equals(id)){
-                return todo;
-            }
-        }
-        return null;
+        return todoRepository.findById(id).get();
     }
 
-    public boolean save(Todo todo) {
-        return data.add(todo);
+    public Todo save(Todo todo) {
+        return todoRepository.insert(todo);
     }
 
-    public boolean deleteById(String id) {
-        for (Todo todo : data) {
-            if (todo.getId().equals(id)){
-                 data.remove(todo);
-                 return true;
-            }
-        }
-        return false;
+    public void deleteById(String id) {
+        todoRepository.deleteById(id);
     }
 
-    public Todo updateTodoDetails(String id, Todo newTodo) {
-        for (Todo todo : data) {
-            if (todo.getId().equals(id)){
-                todo.setTitle(newTodo.getTitle());
-                todo.setDescription(newTodo.getDescription());
-                return todo;
-            }
-        }
-        return null;
-    }
+//    public Todo updateTodoDetails(String id, Todo newTodo) {
+//        for (Todo todo : data) {
+//            if (todo.getId().equals(id)){
+//                todo.setTitle(newTodo.getTitle());
+//                todo.setDescription(newTodo.getDescription());
+//                return todo;
+//            }
+//        }
+//        return null;
+//    }
 }

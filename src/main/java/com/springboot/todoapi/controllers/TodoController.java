@@ -28,18 +28,16 @@ public class TodoController {
     }
     @PostMapping(value = {"","/"})
     public Todo createNewTodo(@RequestBody Todo todo){
-        if(todoService.save(todo)) return todo;
-        else return null;
+        return todoService.save(todo);
     }
 
     @DeleteMapping(value = "/{id}")
-    public String deleteTodoById(@PathVariable String id){
-        if(todoService.deleteById(id)) return " Task with ID: "+id+" is Deleted";
-        else return "Task not existing";
+    public void deleteTodoById(@PathVariable String id){
+        todoService.deleteById(id);
     }
 
-    @PutMapping(value = "/{id}")
-    public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
-        return todoService.updateTodoDetails(id,newTodo);
-    }
+//    @PutMapping(value = "/{id}")
+//    public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
+//        return todoService.updateTodoDetails(id,newTodo);
+//    }
 }
