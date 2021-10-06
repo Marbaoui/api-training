@@ -5,6 +5,7 @@ import com.springboot.todoapi.services.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -26,8 +27,9 @@ public class TodoController {
     public Todo getTodoById(@PathVariable String id) {
         return todoService.getById(id);
     }
+
     @PostMapping(value = {"","/"})
-    public Todo createNewTodo(@RequestBody Todo todo){
+    public Todo createNewTodo(@Valid @RequestBody Todo todo){
         return todoService.save(todo);
     }
 
