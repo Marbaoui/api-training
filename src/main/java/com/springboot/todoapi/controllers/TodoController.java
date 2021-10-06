@@ -2,7 +2,10 @@ package com.springboot.todoapi.controllers;
 
 import com.springboot.todoapi.models.Todo;
 import com.springboot.todoapi.services.TodoService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,23 +22,27 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping(value = {"","/"})
-    public List<Todo> listTodo() {
-        return  todoService.getAllTodos();
+    public ResponseEntity<List<Todo>> listTodo() {
+        List<Todo> result =  todoService.getAllTodos();
+        return new ResponseEntity<List<Todo>>(result, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public Todo getTodoById(@PathVariable String id) {
-        return todoService.getById(id);
+    public ResponseEntity<Todo> getTodoById(@PathVariable String id) {
+        Todo result = todoService.getById(id);
+        return new ResponseEntity<Todo>(result, HttpStatus.OK);
     }
 
     @PostMapping(value = {"","/"})
-    public Todo createNewTodo(@Valid @RequestBody Todo todo){
-        return todoService.save(todo);
+    public ResponseEntity<Todo> createNewTodo(@Valid @RequestBody Todo todo){
+        Todo result = todoService.save(todo);
+        return new ResponseEntity<Todo>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteTodoById(@PathVariable String id){
+    public ResponseEntity<Void> deleteTodoById(@PathVariable String id){
         todoService.deleteById(id);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(value = "/{id}")
