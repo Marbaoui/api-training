@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,5 +36,10 @@ public class TodoController {
     public String deleteTodoById(@PathVariable String id){
         if(todoService.deleteById(id)) return " Task with ID: "+id+" is Deleted";
         else return "Task not existing";
+    }
+
+    @PutMapping(value = "/{id}")
+    public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
+        return todoService.updateTodoDetails(id,newTodo);
     }
 }

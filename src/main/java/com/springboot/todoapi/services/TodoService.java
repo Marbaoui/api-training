@@ -41,4 +41,15 @@ public class TodoService {
         }
         return false;
     }
+
+    public Todo updateTodoDetails(String id, Todo newTodo) {
+        for (Todo todo : data) {
+            if (todo.getId().equals(id)){
+                todo.setTitle(newTodo.getTitle());
+                todo.setDescription(newTodo.getDescription());
+                return todo;
+            }
+        }
+        return null;
+    }
 }
