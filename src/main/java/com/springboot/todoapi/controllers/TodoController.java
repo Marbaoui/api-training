@@ -38,8 +38,8 @@ public class TodoController {
         todoService.deleteById(id);
     }
 
-//    @PutMapping(value = "/{id}")
-//    public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
-//        return todoService.updateTodoDetails(id,newTodo);
-//    }
+    @PutMapping(value = "/{id}")
+    public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
+        return todoService.updateTodoDetails(id,newTodo);
+    }
 }
