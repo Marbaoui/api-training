@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,7 +61,7 @@ public class TodoControllerTest {
         given(todoService.save(Mockito.any(Todo.class))).willReturn(todo1);
 
         ObjectMapper mapper = new ObjectMapper();
-        ;
+
 
         mockMvc.perform(
                 post("/api/v1/todos")
@@ -69,5 +70,21 @@ public class TodoControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is(todo1.getTitle())));
+    }
+
+    @Test
+    public void whenPostTodoById_ThenUpdateTodo() throws Exception{
+        Todo todo1 = new Todo("1","title 1","description 1");
+
+        given(todoService.updateTodoDetails(anyString(), Mockito.any(Todo.class))).willReturn(todo1);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mockMvc.perform(
+                put("/api/v1/todos/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(todo1))
+                )
+                .andExpect(status().isOk());
     }
 }
