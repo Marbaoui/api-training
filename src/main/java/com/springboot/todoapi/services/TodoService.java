@@ -1,5 +1,6 @@
 package com.springboot.todoapi.services;
 
+import com.springboot.todoapi.error.ConflictException;
 import com.springboot.todoapi.error.NotFoundException;
 import com.springboot.todoapi.models.Todo;
 import com.springboot.todoapi.repository.TodoRepository;
@@ -31,6 +32,9 @@ public class TodoService {
     }
 
     public Todo save(Todo todo) {
+        if (todoRepository.findByTitle(todo.getTitle()) != null){
+            throw new ConflictException("Another record with the same title exists");
+        }
         return todoRepository.insert(todo);
     }
 
