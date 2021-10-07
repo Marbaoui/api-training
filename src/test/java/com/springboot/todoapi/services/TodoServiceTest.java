@@ -1,5 +1,6 @@
 package com.springboot.todoapi.services;
 
+import com.springboot.todoapi.error.NotFoundException;
 import com.springboot.todoapi.models.Todo;
 import com.springboot.todoapi.repository.TodoRepository;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -45,5 +47,24 @@ public class TodoServiceTest {
         assertThat(todoService.getAllTodos())
                 .hasSize(2)
                 .contains(todo1, todo2);
+    }
+
+    @Test
+    public void whenGetById_TodoShouldBeFound(){
+        // Mockup
+        Todo todo1 = new Todo("1","title 1","description 1");
+        given(todoRepository.findById(anyString())).willReturn(Optional.ofNullable(todo1));
+        //
+        Todo result = todoService.getById("1");
+        assertThat(result.getTitle())
+                .containsIgnoringCase("title");
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void whenInvalidId_TodoShouldNotBeFound(){
+        // Mockup
+        given(todoRepository.findById(anyString())).willReturn(Optional.empty());
+
+        todoService.getById("1");
     }
 }
