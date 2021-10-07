@@ -4,10 +4,6 @@ import com.springboot.todoapi.models.Todo;
 import com.springboot.todoapi.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.management.Query;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 @Service
 public class TodoService {
