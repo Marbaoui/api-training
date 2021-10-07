@@ -1,10 +1,13 @@
 package com.springboot.todoapi.services;
 
+import com.springboot.todoapi.error.NotFoundException;
 import com.springboot.todoapi.models.Todo;
 import com.springboot.todoapi.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 public class TodoService {
 
@@ -20,7 +23,11 @@ public class TodoService {
     }
 
     public Todo getById(String id) {
-        return todoRepository.findById(id).get();
+        try {
+            return todoRepository.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw  new NotFoundException(String.format("No Record with the id [%s] was found in out database", id));
+        }
     }
 
     public Todo save(Todo todo) {
