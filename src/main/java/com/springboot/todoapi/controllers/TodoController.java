@@ -42,6 +42,6 @@ public class TodoController {
 
     @PutMapping(value = "/{id}")
     public Todo updateTodo(@PathVariable String id, @RequestBody Todo newTodo){
-        return todoService.updateTodoDetails(id,newTodo);
+                            return todoService.updateTodoDetails(id,newTodo);
     }
 }
