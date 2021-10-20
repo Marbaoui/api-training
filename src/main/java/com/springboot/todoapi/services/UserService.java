@@ -1,5 +1,6 @@
 package com.springboot.todoapi.services;
 
+import com.springboot.todoapi.error.NotFoundException;
 import com.springboot.todoapi.models.AppUser;
 import com.springboot.todoapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,13 @@ public class UserService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User("medmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+    public UserDetails  loadUserByUsername(String username) throws UsernameNotFoundException {
+        //return new User("medmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+        AppUser user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new NotFoundException("User Not found");
+        }
+        return user;
     }
 
     public void save(AppUser appUser) {

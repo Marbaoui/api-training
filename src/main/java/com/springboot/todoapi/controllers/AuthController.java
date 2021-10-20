@@ -1,5 +1,6 @@
 package com.springboot.todoapi.controllers;
 
+import com.springboot.todoapi.models.JwtResponse;
 import com.springboot.todoapi.models.SigninRequest;
 import com.springboot.todoapi.services.UserService;
 import com.springboot.todoapi.util.TokenUtil;
@@ -29,13 +30,15 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping(value = {"","/"})
-    public String sigIn(@RequestBody  SigninRequest signinRequest) {
+    public JwtResponse sigIn(@RequestBody  SigninRequest signinRequest) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         UserDetails userDetails = userService.loadUserByUsername(signinRequest.getUsername());
         String token = tokenUtil.generateToken(userDetails);
-        return token;
+        JwtResponse response = new JwtResponse(token);
+        return response;
     }
 }
