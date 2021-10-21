@@ -1,5 +1,6 @@
 package com.springboot.todoapi.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +33,44 @@ public class TokenUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS256, TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                 .compact();
+    }
+
+    public String getUserNameFromToken(String token){
+        try {
+           Claims claims =  getClaims(token);
+
+            return claims.getSubject();
+        } catch(Exception ex) {
+            return null;
+        }
     }
 
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String username = getUserNameFromToken(token);
+        isTokenExipred(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExipred(token));
+    }
+
+    private boolean isTokenExipred(String token) {
+        Date expiration = getClaims(token).getExpiration();
+        return expiration.before(new Date());
+    }
+
+    private Claims getClaims(String token) {
+        Claims claims;
+        try {
+             claims =  Jwts.parser().setSigningKey(TOKEN_SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception ex) {
+            claims = null;
+        }
+        return claims;
     }
 }
