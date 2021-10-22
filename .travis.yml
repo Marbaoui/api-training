@@ -1,3 +1,0 @@
-jdk: openjdk:11
-script:
-  - mvn clean package
