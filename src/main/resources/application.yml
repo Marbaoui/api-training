@@ -1,2 +1,11 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT}
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_NAME}?retryWrites=true&w=majority
+auth:
+  expiration: 604800
+  secret: ${AUTH_SECRECT}
+  header: Authorization
