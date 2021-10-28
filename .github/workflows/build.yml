@@ -13,6 +13,15 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Define variables
+        run: echo "set env variables"
+        env:
+          MONGO_DB_USER: ${{ secrets.CI_MONGO_DB_USER }}
+          MONGO_DB_PASSWORD: ${{ secrets.CI_MONGO_DB_PASSWORD }}
+          MONGO_DB_HOST: ${{ secrets.CI_MONGO_DB_HOST }}
+          MONGO_DB_NAME: ${{ secrets.CI_MONGO_DB_NAME }}
+          AUTH_SECRECT: ${{ secrets.CI_AUTH_SECRECT }}
+          SERVER_PORT: ${{ secrets.CI_SERVER_PORT}}
       - name: Build with Maven
         run: mvn clean package
       - name: Set up QEMU
